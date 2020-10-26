@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.dao.CostBeanMapper" >
+  <resultMap id="BaseResultMap" type="com.jk.entity.CostBean" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="costtype" property="costtype" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="VARCHAR" />
+    <result column="costname" property="costname" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="costtime" property="costtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, costtype, money, costname, status, costtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_cost
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_cost
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jk.entity.CostBean" >
+    insert into t_cost (id, costtype, money, 
+      costname, status, costtime
+      )
+    values (#{id,jdbcType=INTEGER}, #{costtype,jdbcType=INTEGER}, #{money,jdbcType=VARCHAR}, 
+      #{costname,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{costtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jk.entity.CostBean" >
+    insert into t_cost
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="costtype != null" >
+        costtype,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="costname != null" >
+        costname,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="costtime != null" >
+        costtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="costtype != null" >
+        #{costtype,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=VARCHAR},
+      </if>
+      <if test="costname != null" >
+        #{costname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="costtime != null" >
+        #{costtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jk.entity.CostBean" >
+    update t_cost
+    <set >
+      <if test="costtype != null" >
+        costtype = #{costtype,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=VARCHAR},
+      </if>
+      <if test="costname != null" >
+        costname = #{costname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="costtime != null" >
+        costtime = #{costtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jk.entity.CostBean" >
+    update t_cost
+    set costtype = #{costtype,jdbcType=INTEGER},
+      money = #{money,jdbcType=VARCHAR},
+      costname = #{costname,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      costtime = #{costtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectcount" resultType="java.lang.Long">
+  select count(*) from t_cost
+  </select>
+
+  <select id="selectlist" resultMap="BaseResultMap">
+    <bind name="key_off" value="(currPage -1)*pageSize"/>
+    select * from t_cost
+    limit ${key_off},${pageSize}
+  </select>
+
+</mapper>
