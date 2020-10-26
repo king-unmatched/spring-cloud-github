@@ -29,8 +29,10 @@ public class CostServiceImpl implements CostService {
     @Override
     public void addCost(@RequestBody CostBean cos) {
         if(cos.getId()==null){
+            cos.setCosttime(new Date());
             costBeanMapper.insert(cos);
         }else{
+            cos.setCosttime(new Date());
             costBeanMapper.updateByPrimaryKey(cos);
         }
     }
