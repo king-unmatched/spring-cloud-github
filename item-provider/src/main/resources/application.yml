@@ -1,0 +1,22 @@
+server:
+  port: 8766
+
+spring:
+  datasource:
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://DESKTOP-70RB78L:3306/xiangmu?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    type: com.alibaba.druid.pool.DruidDataSource
+  application:
+    name: item-provider
+mybatis:
+  mapper-locations: classpath*:mapping/*.xml
+  type-aliases-package: com.jk.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
