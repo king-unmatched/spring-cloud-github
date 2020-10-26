@@ -2,6 +2,7 @@ package com.jk.dao;
 
 import com.jk.entity.ItemBean;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,9 +20,9 @@ public interface ItemBeanMapper {
 
     int updateByPrimaryKey(ItemBean record);
 
-    Long count();
+    Long count(@Param("item") ItemBean item);
 
-    List<ItemBean> findPage(Integer currPage, Integer pageSize);
+    List<ItemBean> findPage(@Param("currPage")Integer currPage,@Param("pageSize") Integer pageSize,@Param("item") ItemBean item);
 
     void del(String[] id);
 }

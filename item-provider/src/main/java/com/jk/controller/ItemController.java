@@ -24,10 +24,10 @@ public class ItemController {
         ser.insert(item);
     }
     @RequestMapping("del")
-    public void del(@RequestBody String[] id){
+    public void del(@RequestParam String[] id){
         ser.del(id);
     }
-    @RequestMapping("id")
+    @RequestMapping("huix")
     public ItemBean huix(@RequestParam Integer id){
         return ser.huix(id);
     }

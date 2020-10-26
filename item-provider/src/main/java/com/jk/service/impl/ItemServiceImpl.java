@@ -16,8 +16,8 @@ public class ItemServiceImpl implements ItemService {
     private ItemBeanMapper mapper;
     @Override
     public PageResult select(Integer currPage, Integer pageSize, ItemBean item) {
-        Long total = mapper.count();
-        List<ItemBean> itemBean = mapper.findPage(currPage, pageSize);
+        Long total = mapper.count(item);
+        List<ItemBean> itemBean = mapper.findPage(currPage, pageSize,item);
         Long totalPage = total%pageSize == 0 ? total/pageSize : (total/pageSize + 1);
         return new PageResult(total, itemBean, currPage, pageSize, totalPage);
     }

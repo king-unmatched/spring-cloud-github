@@ -17,7 +17,16 @@
     <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" onclick="xiu(0);"><i class="fa fa-file-o"></i> 新建</button>
     <button type="button" class="btn btn-default" title="删除" onclick="delpi()"><i class="fa fa-trash-o"></i> 删除</button>
     <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
-    <br>
+    <form action="" id="list_form">
+        <div class="form-group">
+            <label for="itemname" class="col-sm-1 control-label">名称：</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="itemname" v-model="itemname" placeholder="请输入名称">
+            </div>
+        </div>
+        <button type="button" class="btn btn-default" onclick="searchItemList()">搜索</button>
+    </form>
+    <br/>
     <table class="table table-bordered">
         <tr>
             <th><input id="selall" type="checkbox"></th>
@@ -37,7 +46,7 @@
             <td>{{item.itemname}}</td>
             <td>{{item.itemprincipal}}</td>
             <td>{{item.itemstage}}</td>
-            <td>{{item.itemstatus}}</td>
+            <td>{{item.itemstatus==0?'进行中':item.itemstatus==1?'已完成':'已延迟'}}</td>
             <td>{{item.itemcreatime}}</td>
             <td>
                 <a data-toggle="modal" data-target="#editModal" @click="xiu(item.id)">[跟进]</a> |
@@ -90,9 +99,9 @@
                         </tr>
                         <tr>
                             <td>项目状态</td>
-                            <td><input type="radio" name="itemstatus" v-model="list.itemstatus">进行中
-                                <input type="radio" name="itemstatus" v-model="list.itemstatus">已完成
-                                <input type="radio" name="itemstatus" v-model="list.itemstatus">已延期
+                            <td><input type="radio" value="0" name="itemstatus" v-model="list.itemstatus">进行中
+                                <input type="radio" value="1" name="itemstatus" v-model="list.itemstatus">已完成
+                                <input type="radio" value="2" name="itemstatus" v-model="list.itemstatus">已延期
                             </td>
                         </tr>
                     </table>
@@ -113,7 +122,8 @@
             totalPage:"",
             total:"",
             currPage:"1",
-            pageSize:"3"
+            pageSize:"3",
+            itemname:""
         }
     })
     var vs = new Vue({
@@ -196,7 +206,7 @@
         $.ajax({
             type:"post",
             url:"../select",
-            data:{"currPage":vm.currPage,"pageSize":vm.pageSize},
+            data:{"currPage":vm.currPage,"pageSize":vm.pageSize,'itemname':vm.itemname},
             dataType:"json",
             success: function(result) {
                 vm.itemlist = result.rows;

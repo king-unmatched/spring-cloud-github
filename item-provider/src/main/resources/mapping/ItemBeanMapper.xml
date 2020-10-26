@@ -116,11 +116,13 @@
   </update>
   <select id="count" resultType="java.lang.Long">
   	select count(*) from t_item
+    <include refid="sqlfind"></include>
   </select>
 
-  <select id="findPage" resultMap="BaseResultMap">
+  <select id="findPage" resultType="com.jk.entity.ItemBean">
     <bind name="key_off" value="(currPage - 1)*pageSize"/>
     select *  from t_item
+    <include refid="sqlfind"></include>
     limit ${key_off},${pageSize}
   </select>
   <delete id="del">
@@ -129,4 +131,11 @@
     #{id}
   </foreach>)
   </delete>
+  <sql id="sqlfind">
+    <where>
+      <if test="item.itemname!=null and item.itemname!=''">
+        and itemname like '%${item.itemname}%'
+      </if>
+    </where>
+  </sql>
 </mapper>

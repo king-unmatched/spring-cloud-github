@@ -17,8 +17,8 @@ public interface ItemService {
     public void insert (@RequestBody ItemBean item);
 
     @RequestMapping("del")
-    public void del(@RequestBody String[] id);
+    public void del(@RequestParam String[] id);
 
-    @RequestMapping("id")
+    @RequestMapping("huix")
     public ItemBean huix(@RequestParam Integer id);
 }

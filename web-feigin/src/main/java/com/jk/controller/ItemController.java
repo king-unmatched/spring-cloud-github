@@ -27,7 +27,7 @@ public class ItemController {
         ser.del(id);
         return "删除成功";
     }
-    @RequestMapping("id")
+    @RequestMapping("huix")
     public ItemBean huix(Integer id){
         return ser.huix(id);
     }

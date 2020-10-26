@@ -20,3 +20,5 @@ spring:
     password: ''
     port: 6379
     timeout: 5000
+  main:
+    allow-bean-definition-overriding: true
