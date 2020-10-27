@@ -25,7 +25,7 @@ public class ContractController {
         return "contract/show";
     }
 
-    @RequestMapping("select")
+    @RequestMapping("find")
     @ResponseBody
     public PageResult select(Integer currPage, Integer pageSize,String  name){
             PageResult select = contractService.select(currPage, pageSize, name);
@@ -33,28 +33,28 @@ public class ContractController {
     }
 
 
-    @RequestMapping("insert")
+    @RequestMapping("add")
     @ResponseBody
     public void insert(ContractBean contract){
         contractService.insert(contract);
     }
 
 
-    @RequestMapping("del")
+    @RequestMapping("deletee")
     @ResponseBody
     public void del(String[] id){
         contractService.del(id);
     }
 
 
-    @RequestMapping("huix")
+    @RequestMapping("contractHX")
     @ResponseBody
     public ContractBean huix(Integer id){
         return contractService.huix(id);
     }
 
 
-    @RequestMapping("xiu")
+    @RequestMapping("updateContract")
     @ResponseBody
     public void xiu(Integer id){
         contractService.xiu(id);
