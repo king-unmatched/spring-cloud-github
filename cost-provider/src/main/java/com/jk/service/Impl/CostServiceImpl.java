@@ -42,4 +42,9 @@ public class CostServiceImpl implements CostService {
         return costBeanMapper.selectByPrimaryKey(id);
     }
 
+    @Override
+    public void zhuangtai(Integer id, Integer status) {
+        costBeanMapper.zhuangtai(id,status);
+    }
+
 }

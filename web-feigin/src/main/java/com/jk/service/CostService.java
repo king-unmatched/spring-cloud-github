@@ -19,5 +19,6 @@ public interface CostService {
     @RequestMapping("huixian")
     public CostBean huixian(@RequestParam Integer id);
 
-
+    @RequestMapping("zhuangtai")
+    public void zhuangtai(@RequestParam Integer id,@RequestParam Integer status);
 }

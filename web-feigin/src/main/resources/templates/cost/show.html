@@ -11,6 +11,16 @@
 </head>
 <body>
 <div id="app" class="container">
+    <form action="" id="list_form">
+        <div class="form-group">
+            <label for="costname" class="col-sm-1 control-label">名称：</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="costname" v-model="costname" placeholder="请输入名称">
+            </div>
+        </div>
+        <button type="button" class="btn btn-default" onclick="selectlistAll();">搜索</button>
+    </form>
+    <br>
     <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" onclick="huixian(0);"><i class="fa fa-file-o"></i> 新建</button>
     <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
     <table class="table table-bordered">
@@ -103,7 +113,8 @@
             totalPage:"",
             total:"",
             currPage:"1",
-            pageSize:"3"
+            pageSize:"3",
+            costname:""
         }
     })
 
@@ -142,16 +153,16 @@
             },
         });
     }
-   /* function baoxiao(id,status){
+    function baoxiao(id,status){
         $.ajax({
-            url:"../to/zhuangtai",
+            url:"../to/baoxiao",
             type:"post",
             data:{id:id,status:status},
             success:function(){
                 selectlistAll();
             }
         });
-    }*/
+    }
     $(function(){
         selectlistAll();
     })
@@ -159,7 +170,7 @@
         $.ajax({
             type:"post",
             url:"../to/list",
-            data:{"currPage":vm.currPage,"pageSize":vm.pageSize},
+            data:{"currPage":vm.currPage,"pageSize":vm.pageSize,"costname":vm.costname},
             dataType:"json",
             success: function(result) {
                 vm.costAll = result.rows;

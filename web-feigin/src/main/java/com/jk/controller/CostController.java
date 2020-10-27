@@ -37,4 +37,10 @@ public class CostController {
     public CostBean huixian(@RequestParam Integer id){
         return  costService.huixian(id);
     }
+
+    @RequestMapping("baoxiao")
+    @ResponseBody
+    public void zhuangtai(Integer id, Integer status){
+        costService.zhuangtai(id,status);
+    }
 }
