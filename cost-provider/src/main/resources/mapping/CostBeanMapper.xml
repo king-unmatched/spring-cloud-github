@@ -139,6 +139,6 @@
   </update>
 
   <delete id="delcost" parameterType="string">
-    delete from t_cost where id in (${id})
+    delete from t_cost where id in (ids)
    </delete>
 </mapper>
