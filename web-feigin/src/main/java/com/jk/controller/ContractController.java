@@ -26,7 +26,7 @@ public class ContractController {
         return "contract/show";
     }
 
-    @RequestMapping("findContract")
+    @RequestMapping("find")
     @ResponseBody
     public PageResult select(Integer currPage, Integer pageSize,String  name){
             PageResult select = contractService.select(currPage, pageSize, name);

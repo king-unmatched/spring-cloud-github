@@ -47,4 +47,8 @@ public class CostServiceImpl implements CostService {
         costBeanMapper.zhuangtai(id,status);
     }
 
+    @Override
+    public void delcost(String id) {
+        costBeanMapper.delcost(id);
+    }
 }

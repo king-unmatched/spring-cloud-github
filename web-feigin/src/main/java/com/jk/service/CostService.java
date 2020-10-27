@@ -21,4 +21,7 @@ public interface CostService {
 
     @RequestMapping("zhuangtai")
     public void zhuangtai(@RequestParam Integer id,@RequestParam Integer status);
+
+    @RequestMapping("delcost")
+    public void delcost(@RequestParam String id);
 }

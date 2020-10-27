@@ -29,4 +29,8 @@ public class CostController {
     public void zhuangtai(@RequestParam Integer id,@RequestParam Integer status){
         costservice.zhuangtai(id,status);
     }
+    @RequestMapping("delcost")
+    public void delcost(@RequestParam String id){
+        costservice.delcost(id);
+    }
 }
