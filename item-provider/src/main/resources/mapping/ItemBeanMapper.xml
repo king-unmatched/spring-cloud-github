@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.dao.ItemBeanMapper" >
+  <resultMap id="BaseResultMap" type="com.jk.entity.ItemBean" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="itemnumber" property="itemnumber" jdbcType="VARCHAR" />
+    <result column="itemname" property="itemname" jdbcType="VARCHAR" />
+    <result column="itemprincipal" property="itemprincipal" jdbcType="VARCHAR" />
+    <result column="itemstage" property="itemstage" jdbcType="VARCHAR" />
+    <result column="itemstatus" property="itemstatus" jdbcType="INTEGER" />
+    <result column="itemcreatime" property="itemcreatime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, itemnumber, itemname, itemprincipal, itemstage, itemstatus, itemcreatime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_item
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_item
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jk.entity.ItemBean" >
+    insert into t_item (itemnumber, itemname,
+      itemprincipal, itemstage, itemstatus, 
+      itemcreatime)
+    values ( #{itemnumber,jdbcType=VARCHAR}, #{itemname,jdbcType=VARCHAR},
+      #{itemprincipal,jdbcType=VARCHAR}, #{itemstage,jdbcType=VARCHAR}, #{itemstatus,jdbcType=INTEGER}, 
+      #{itemcreatime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jk.entity.ItemBean" >
+    insert into t_item
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="itemnumber != null" >
+        itemnumber,
+      </if>
+      <if test="itemname != null" >
+        itemname,
+      </if>
+      <if test="itemprincipal != null" >
+        itemprincipal,
+      </if>
+      <if test="itemstage != null" >
+        itemstage,
+      </if>
+      <if test="itemstatus != null" >
+        itemstatus,
+      </if>
+      <if test="itemcreatime != null" >
+        itemcreatime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="itemnumber != null" >
+        #{itemnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="itemname != null" >
+        #{itemname,jdbcType=VARCHAR},
+      </if>
+      <if test="itemprincipal != null" >
+        #{itemprincipal,jdbcType=VARCHAR},
+      </if>
+      <if test="itemstage != null" >
+        #{itemstage,jdbcType=VARCHAR},
+      </if>
+      <if test="itemstatus != null" >
+        #{itemstatus,jdbcType=INTEGER},
+      </if>
+      <if test="itemcreatime != null" >
+        #{itemcreatime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jk.entity.ItemBean" >
+    update t_item
+    <set >
+      <if test="itemnumber != null" >
+        itemnumber = #{itemnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="itemname != null" >
+        itemname = #{itemname,jdbcType=VARCHAR},
+      </if>
+      <if test="itemprincipal != null" >
+        itemprincipal = #{itemprincipal,jdbcType=VARCHAR},
+      </if>
+      <if test="itemstage != null" >
+        itemstage = #{itemstage,jdbcType=VARCHAR},
+      </if>
+      <if test="itemstatus != null" >
+        itemstatus = #{itemstatus,jdbcType=INTEGER},
+      </if>
+      <if test="itemcreatime != null" >
+        itemcreatime = #{itemcreatime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jk.entity.ItemBean" >
+    update t_item
+    set itemnumber = #{itemnumber,jdbcType=VARCHAR},
+      itemname = #{itemname,jdbcType=VARCHAR},
+      itemprincipal = #{itemprincipal,jdbcType=VARCHAR},
+      itemstage = #{itemstage,jdbcType=VARCHAR},
+      itemstatus = #{itemstatus,jdbcType=INTEGER},
+      itemcreatime = #{itemcreatime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="count" resultType="java.lang.Long">
+  	select count(*) from t_item
+    <include refid="sqlfind"></include>
+  </select>
+
+  <select id="findPage" resultType="com.jk.entity.ItemBean">
+    <bind name="key_off" value="(currPage - 1)*pageSize"/>
+    select *  from t_item
+    <include refid="sqlfind"></include>
+    limit ${key_off},${pageSize}
+  </select>
+  <delete id="del">
+    delete from t_item where id in
+    (<foreach collection="array" separator="," item="id">
+    #{id}
+  </foreach>)
+  </delete>
+  <sql id="sqlfind">
+    <where>
+      <if test="item.itemname!=null and item.itemname!=''">
+        and itemname like '%${item.itemname}%'
+      </if>
+    </where>
+  </sql>
+</mapper>

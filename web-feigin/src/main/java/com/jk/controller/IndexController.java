@@ -26,4 +26,8 @@ public class IndexController {
         return "index";
     }
 
+    @RequestMapping("itemShow")
+    public String itemShow(){
+        return "Item/ItemShow";
+    }
 }
