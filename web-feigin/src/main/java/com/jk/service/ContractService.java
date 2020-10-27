@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "contract-provider")
 public interface ContractService {
 
-    @RequestMapping("findContract")
+    @RequestMapping("find")
     public PageResult select(@RequestParam Integer currPage, @RequestParam Integer pageSize, @RequestParam String  name);
 
-    @RequestMapping("addContract")
+    @RequestMapping("add")
     public void insert(@RequestBody ContractBean contract);
 
-    @RequestMapping("deleteContract")
+    @RequestMapping("deletee")
     public void del(@RequestParam String[] id);
 
     @RequestMapping("contractHX")
