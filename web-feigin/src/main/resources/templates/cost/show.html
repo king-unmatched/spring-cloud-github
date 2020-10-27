@@ -11,9 +11,7 @@
 </head>
 <body>
 <div id="app" class="container">
-
-    <br>
-    <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" onclike="huixian(0);"><i class="fa fa-file-o"></i> 新建</button>
+    <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" onclick="huixian(0);"><i class="fa fa-file-o"></i> 新建</button>
     <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
     <table class="table table-bordered">
         <tr>
@@ -29,10 +27,10 @@
         <tr v-for="we in costAll">
             <td><input type="checkbox" name="check" :value="we.id"></td>
             <td>{{we.id}}</td>
-            <td>{{we.costtype==1?"招待费":we.costtype==2?"餐费":we.costtype==3?"打车费":""}}</td>
+            <td>{{we.costtype==1?"餐费":we.costtype==2?"打车费":we.costtype==3?"其他费用":""}}</td>
             <td>{{we.money}}</td>
             <td>{{we.costname}}</td>
-            <td>{{we.status==1?"未报销":"已报销"}}</td>
+            <td>{{we.status==1?"已报销":"未报销"}}</td>
             <td>{{we.costtime}}</td>
             <td>
                 <a class="btn btn-default" data-toggle="modal" data-target="#editModal" @click="huixian(we.id)">详情</a>
@@ -40,6 +38,15 @@
             </td>
         </tr>
     </table>
+    <div class="col-md-6">
+        <strong>当前第 {{currPage}}页,每页<select style="width:50px;" v-model="pageSize" @change="shuaxin()">
+            <option value="3">3</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+        </select>条,共 {{totalPage}} 页.一共 {{total}} 条记录
+        </strong>
+    </div>
     <div id="example" style="text-align: right"> <ul id="pageLimit"></ul> </div>
 </div>
 
@@ -49,7 +56,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h3 id="myModalLabel">商品编辑</h3>
+                <h3 id="myModalLabel">费用管理</h3>
             </div>
             <form id="forms" method="post">
                 <div class="modal-body" id="ppa">
@@ -97,17 +104,18 @@
             totalPage:"",
             total:"",
             currPage:"1",
-            pageSize:"3",
-            name:"",
+            pageSize:"3"
         }
     })
 
 
+    //新增
     function insert(){
         $.ajax({
-            url:"/to/add",
+            url:"../to/addCost",
             type:"post",
-            data:$('#forms').serialize(),
+            data:$("#forms").serialize(),
+            datatype:'json',
             success:function(){
                 selectlistAll();
             },
@@ -122,9 +130,12 @@
         }
     })
 
+    function shuaxin(){
+        selectlistAll();
+    }
     function huixian(id){
         $.ajax({
-            url:"/to/hui",
+            url:"../to/hui",
             type:"post",
             data:{id:id},
             success:function(data){
@@ -132,35 +143,35 @@
             },
         });
     }
-    function baoxiao(id,status){
+   /* function baoxiao(id,status){
         $.ajax({
-            url:"/to/zhuangtai",
+            url:"../to/zhuangtai",
             type:"post",
             data:{id:id,status:status},
             success:function(){
                 selectlistAll();
             }
         });
-    }
+    }*/
     $(function(){
         selectlistAll();
     })
-    function selectlistAll(){
+    function selectlistAll() {
         $.ajax({
             type:"post",
-            url:"/to/list",
-            data:{"currPage":vm.currPage,"pageSiza":vm.pageSize,"name":vm.name},
+            url:"../to/list",
+            data:{"currPage":vm.currPage,"pageSize":vm.pageSize},
             dataType:"json",
-            success:function(result){
-                vm.costAll=result.rows,
-                vm.totalPage=result.totalPage,
-                vm.total=result.total,
+            success: function(result) {
+                vm.costAll = result.rows;
+                vm.totalPage = result.totalPage;
+                vm.total = result.total;
                 vm.currPage = result.currPage;
                 vm.pageSize = result.pageSize;
                 setPage(result.currPage,result.totalPage,result.pageSize,selectlistAll);
             },
-            error:function(){
-                alert("查询错误");
+            error : function() {
+                alert("系统错误，请联系管理员！");
             }
         })
     }

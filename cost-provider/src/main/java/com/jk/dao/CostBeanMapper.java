@@ -19,7 +19,7 @@ public interface CostBeanMapper {
 
     int updateByPrimaryKey(CostBean record);
 
-    Long selectcount();
+    Long selectcount(@Param("cost")CostBean cost);
 
     List<CostBean> selectlist(@Param("currPage") Integer currPage, @Param("pageSize")Integer pageSize, @Param("cost")CostBean cost);
 
