@@ -26,11 +26,13 @@ public class CostController {
         return "cost/show";
     }
     @RequestMapping("add")
+    @ResponseBody
     public void addCost(@RequestBody CostBean cos){
         costService.addCost(cos);
     }
 
     @RequestMapping("hui")
+    @ResponseBody
     public CostBean huixian(@RequestParam Integer id){
         return  costService.huixian(id);
     }
