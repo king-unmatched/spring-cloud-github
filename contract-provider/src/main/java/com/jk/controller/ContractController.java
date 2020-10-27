@@ -14,30 +14,30 @@ public class ContractController {
     @Autowired
     private ContractService contractService;
 
-    @RequestMapping("select")
+    @RequestMapping("find")
     public PageResult select(@RequestParam Integer currPage, @RequestParam Integer pageSize, @RequestParam String  name){
         return contractService.select(currPage,pageSize,name);
     }
 
-    @RequestMapping("insert")
+    @RequestMapping("add")
     public void insert(@RequestBody ContractBean contract){
         contractService.insert(contract);
     }
 
 
-    @RequestMapping("del")
+    @RequestMapping("deletee")
     public void del(@RequestParam String[] id){
         contractService.del(id);
     }
 
 
-    @RequestMapping("huix")
+    @RequestMapping("contractHX")
     public ContractBean huix(@RequestParam Integer id){
         return contractService.huix(id);
     }
 
 
-    @RequestMapping("xiu")
+    @RequestMapping("updateContract")
     public void xiu(@RequestParam Integer id){
         contractService.xiu(id);
     }
