@@ -11,7 +11,7 @@
     <groupId>com.jk</groupId>
     <artifactId>cost-provider</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>item-provider</name>
+    <name>cost-provider</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
