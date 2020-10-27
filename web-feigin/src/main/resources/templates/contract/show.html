@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -131,7 +131,11 @@
     })
     function xiug(id){
         $.ajax({
+<<<<<<< HEAD
             url:"/contract/updateContract",
+=======
+            url:"../cont/updateContract",
+>>>>>>> ab63d98ff6ad43d82c351011763621d27b2b5896
             type:"post",
             data:{id:id},
             success:function(){
@@ -144,7 +148,11 @@
     }
     function shan(id) {
         $.ajax({
+<<<<<<< HEAD
             url:"/contract/deleteContract",
+=======
+            url:"../cont/deletee",
+>>>>>>> ab63d98ff6ad43d82c351011763621d27b2b5896
             type:"post",
             data:{id:id},
             success:function(){
@@ -156,7 +164,11 @@
     //修改
     function xiu(id){
         $.ajax({
+<<<<<<< HEAD
             url:"/contract/contractHX",
+=======
+            url:"../cont/contractHX",
+>>>>>>> ab63d98ff6ad43d82c351011763621d27b2b5896
             type:"post",
             data:{id:id},
             success:function(data){
@@ -167,7 +179,11 @@
     //新增
     function insert(){
         $.ajax({
+<<<<<<< HEAD
             url:"/contract/addContract",
+=======
+            url:"../cont/add",
+>>>>>>> ab63d98ff6ad43d82c351011763621d27b2b5896
             type:"post",
             data:$("#myforms").serialize(),
             datatype:'json',
@@ -190,7 +206,11 @@
             return;
         }
         $.ajax({
+<<<<<<< HEAD
             url:"/contract/deleteContract",
+=======
+            url:"../cont/deletee",
+>>>>>>> ab63d98ff6ad43d82c351011763621d27b2b5896
             type:"post",
             data:{'id':rid},
             success:function(){
@@ -211,7 +231,11 @@
     function searchUserList() {
         $.ajax({
             type:"post",
+<<<<<<< HEAD
             url:"/contract/findContract",
+=======
+            url:"../cont/find",
+>>>>>>> ab63d98ff6ad43d82c351011763621d27b2b5896
             data:{"currPage":vm.currPage,"pageSize":vm.pageSize,"name":vm.name},
             dataType:"json",
             success: function(result) {

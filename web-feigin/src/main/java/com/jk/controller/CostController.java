@@ -18,16 +18,17 @@ public class CostController {
 
     @RequestMapping("list")
     @ResponseBody
-    public PageResult selectlist(@RequestParam(value="currPage",defaultValue="1")Integer currPage, @RequestParam(value="pageSize",defaultValue="3")Integer pageSize, CostBean cost){
+    public PageResult selectlist(Integer currPage,Integer pageSize,CostBean cost){
         return costService.selectlist(currPage,pageSize,cost);
     }
     @RequestMapping("show")
     public String show(){
         return "cost/show";
     }
-    @RequestMapping("add")
+
+    @RequestMapping("addCost")
     @ResponseBody
-    public void addCost(@RequestBody CostBean cos){
+    public void addCost(CostBean cos){
         costService.addCost(cos);
     }
 
@@ -36,5 +37,4 @@ public class CostController {
     public CostBean huixian(@RequestParam Integer id){
         return  costService.huixian(id);
     }
-
 }

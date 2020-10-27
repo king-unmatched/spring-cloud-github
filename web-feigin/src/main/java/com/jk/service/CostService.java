@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "cost-provider")
 public interface CostService {
 
-    @RequestMapping("select")
-    public PageResult selectlist(@RequestParam(value="currPage",defaultValue="1")Integer currPage, @RequestParam(value="pageSize",defaultValue="3")Integer pageSize,@RequestBody CostBean cost);
+    @RequestMapping("list")
+    public PageResult selectlist(@RequestParam Integer currPage, @RequestParam Integer pageSize,@RequestBody CostBean cost);
 
     @RequestMapping("addCost")
     public void addCost(@RequestBody CostBean cos);

@@ -9,21 +9,21 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CostController {
     @Autowired
-    private CostService costService;
+    private CostService costservice;
 
-    @RequestMapping("select")
-    public PageResult selectlist(@RequestParam(value="currPage",defaultValue="1")Integer currPage, @RequestParam(value="pageSize",defaultValue="3")Integer pageSize, CostBean cost){
-        return costService.select(currPage,pageSize,cost);
+    @RequestMapping("list")
+    public PageResult selectlist(@RequestParam Integer currPage, @RequestParam Integer pageSize,@RequestBody CostBean cost){
+        return costservice.select(currPage,pageSize,cost);
     }
 
     @RequestMapping("addCost")
     public void addCost(@RequestBody CostBean cos){
-        costService.addCost(cos);
+        costservice.addCost(cos);
     }
 
     @RequestMapping("huixian")
     public CostBean huixian(@RequestParam Integer id){
-        return  costService.huixian(id);
+        return  costservice.huixian(id);
     }
 
 }
