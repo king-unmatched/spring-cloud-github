@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@RequestMapping("contract")
 public class ContractController {
 
     @Autowired
@@ -25,7 +26,7 @@ public class ContractController {
         return "contract/show";
     }
 
-    @RequestMapping("find")
+    @RequestMapping("findContract")
     @ResponseBody
     public PageResult select(Integer currPage, Integer pageSize,String  name){
             PageResult select = contractService.select(currPage, pageSize, name);
@@ -33,14 +34,14 @@ public class ContractController {
     }
 
 
-    @RequestMapping("add")
+    @RequestMapping("addContract")
     @ResponseBody
     public void insert(ContractBean contract){
         contractService.insert(contract);
     }
 
 
-    @RequestMapping("deletee")
+    @RequestMapping("deleteContract")
     @ResponseBody
     public void del(String[] id){
         contractService.del(id);

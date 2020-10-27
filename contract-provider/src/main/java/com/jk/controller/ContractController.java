@@ -14,18 +14,18 @@ public class ContractController {
     @Autowired
     private ContractService contractService;
 
-    @RequestMapping("find")
+    @RequestMapping("findContract")
     public PageResult select(@RequestParam Integer currPage, @RequestParam Integer pageSize, @RequestParam String  name){
         return contractService.select(currPage,pageSize,name);
     }
 
-    @RequestMapping("add")
+    @RequestMapping("addContract")
     public void insert(@RequestBody ContractBean contract){
         contractService.insert(contract);
     }
 
 
-    @RequestMapping("deletee")
+    @RequestMapping("deleteContract")
     public void del(@RequestParam String[] id){
         contractService.del(id);
     }
