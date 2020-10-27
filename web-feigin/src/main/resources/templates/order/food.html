@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap/css/bootstrap.min.css">
+    <script src="../js/bootstraps/bootstrap-paginator.js"></script>
+    <script src="../js/vue/vue.min.js"></script>
+</head>
+<body>
+<div id="app" class="container">
+    <h1>菜品管理</h1>
+    <table class="table table-bordered">
+        <tr>
+            <th>序号</th>
+            <th>日期</th>
+            <th>信息</th>
+            <th>操作</th>
+        </tr>
+        <tr v-for="food in foodlist">
+            <td>{{food.foodId}}</td>
+            <td>{{food.createtime}}</td>
+            <td>{{food.foodInfo}}</td>
+            <td>
+                <a data-toggle="modal" data-target="#editModal" @click="xiu(food.foodId)">[编辑]</a>
+            </td>
+        </tr>
+    </table>
+    <div class="col-md-6">
+        <strong>当前第 {{currPage}}页,每页<select style="width:50px;" v-model="pageSize" @change="shuaxin()">
+            <option value="3">3</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+        </select>条,共 {{totalPage}} 页.一共 {{total}} 条记录
+        </strong>
+    </div>
+    <div id="example" style="text-align: right"> <ul id="pageLimit"></ul> </div>
+</div>
+<!-- 编辑窗口 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="ppa">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">新增</h3>
+            </div>
+            <form id="myforms" method="post">
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped"  width="800px">
+                        <input class="form-control" name="foodId" style="display:none" readonly="readonly" v-model="list.foodId">
+                        <tr>
+                            <td>信息</td>
+                            <td><input class="form-control" type="text" name="foodInfo" v-model="list.foodInfo"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" onclick="insert()">保存</button>
+                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            foodlist: "",
+            totalPage:"",
+            total:"",
+            currPage:"1",
+            pageSize:"10",
+        }
+    })
+
+    var vs = new Vue({
+        el: '#ppa',
+        data: {
+            list:''
+        }
+    })
+
+    function shuaxin(){
+        searchOrderList();
+    }
+
+    //新增
+    function insert(){
+        $.ajax({
+            url:"/order/addFood",
+            type:"post",
+            data:$("#myforms").serialize(),
+            datatype:'json',
+            success:function(){
+                searchOrderList();
+            },
+        });
+    }
+
+    //分页查询
+    $(function() {
+        searchOrderList();
+        $("#selall").click(
+            function(){
+                $("input[name='che']").attr("checked",this.checked);
+            })
+    })
+    function searchOrderList() {
+        $.ajax({
+            type:"post",
+            url:"/order/findfood",
+            data:{"currPage":vm.currPage,"pageSize":vm.pageSize,"name":vm.name},
+            dataType:"json",
+            success: function(result) {
+                vm.foodlist = result.rows;
+                vm.totalPage = result.totalPage;
+                vm.total = result.total;
+                vm.currPage = result.currPage;
+                vm.pageSize = result.pageSize;
+                setPage(result.currPage,result.totalPage,result.pageSize,searchOrderList);
+            },
+            error : function() {
+                alert("系统错误，请联系管理员！");
+            }
+        })
+    }
+
+    //修改
+    function xiu(foodId){
+        $.ajax({
+            url:"/order/foodHX",
+            type:"post",
+            data:{foodId:foodId},
+            success:function(data){
+                vs.list=data;
+            },
+        });
+    }
+
+    /**
+     *
+     * @param pageCurrent 当前所在页
+     * @param pageSum 总页数
+     * @param callback 调用ajax
+     */
+    function setPage(pageCurrent, pageSum, pageSize, callback) {
+        $('#pageLimit').bootstrapPaginator({
+            currentPage: pageCurrent,//当前的请求页面。
+            totalPages: pageSum,//一共多少页。
+            size:"normal",//应该是页眉的大小。
+            bootstrapMajorVersion: 3,//bootstrap的版本要求。
+            alignment:"right",
+            numberOfPages:pageSize,//一页列出多少数据。
+            itemTexts: function (type, page, current) {//如下的代码是将页眉显示的中文显示我们自定义的中文。
+                switch (type) {
+                    case "first": return "首页";
+                    case "prev": return "上一页";
+                    case "next": return "下一页";
+                    case "last": return "末页";
+                    case "page": return page;
+                }
+            },
+            //当单击操作按钮的时候, 执行该函数, 调用ajax渲染页面
+            onPageClicked: function (event,originalEvent,type,page) {
+                // 把当前点击的页码赋值给currentPage, 调用ajax,渲染页面
+                vm.currPage = page;
+                callback && callback()
+            }
+        });
+    }
+</script>
+</body>
+</html>
