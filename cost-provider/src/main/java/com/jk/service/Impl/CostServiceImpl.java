@@ -20,20 +20,20 @@ public class CostServiceImpl implements CostService {
 
     @Override
     public PageResult select(Integer currPage, Integer pageSize, CostBean cost) {
-        Long total = costBeanMapper.selectcount();
+        Long total = costBeanMapper.selectcount(cost);
         List<CostBean> list = costBeanMapper.selectlist(currPage, pageSize,cost);
         Long totalPage = total%pageSize == 0 ? total/pageSize : (total/pageSize + 1);
         return new PageResult(total, list, currPage, pageSize, totalPage);
     }
 
     @Override
-    public void addCost(@RequestBody CostBean cos) {
+    public void addCost(CostBean cos) {
         if(cos.getId()==null){
             cos.setCosttime(new Date());
             costBeanMapper.insert(cos);
         }else{
             cos.setCosttime(new Date());
-            costBeanMapper.updateByPrimaryKey(cos);
+            costBeanMapper.updateByPrimaryKeySelective(cos);
         }
     }
 

@@ -6,7 +6,7 @@
     <result column="costtype" property="costtype" jdbcType="INTEGER" />
     <result column="money" property="money" jdbcType="VARCHAR" />
     <result column="costname" property="costname" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
     <result column="costtime" property="costtime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -23,11 +23,11 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.jk.entity.CostBean" >
-    insert into t_cost (id, costtype, money, 
+    insert into t_cost (costtype, money,
       costname, status, costtime
       )
-    values (#{id,jdbcType=INTEGER}, #{costtype,jdbcType=INTEGER}, #{money,jdbcType=VARCHAR}, 
-      #{costname,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{costtime,jdbcType=TIMESTAMP}
+    values ( #{costtype,jdbcType=INTEGER}, #{money,jdbcType=VARCHAR},
+      #{costname,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{costtime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jk.entity.CostBean" >
@@ -66,7 +66,7 @@
         #{costname,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
-        #{status,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="costtime != null" >
         #{costtime,jdbcType=TIMESTAMP},
@@ -86,7 +86,7 @@
         costname = #{costname,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
-        status = #{status,jdbcType=VARCHAR},
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="costtime != null" >
         costtime = #{costtime,jdbcType=TIMESTAMP},
@@ -99,7 +99,7 @@
     set costtype = #{costtype,jdbcType=INTEGER},
       money = #{money,jdbcType=VARCHAR},
       costname = #{costname,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
       costtime = #{costtime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -108,7 +108,7 @@
   select count(*) from t_cost
   </select>
 
-  <select id="selectlist" resultMap="BaseResultMap">
+  <select id="selectlist" resultType="CostBean">
     <bind name="key_off" value="(currPage -1)*pageSize"/>
     select * from t_cost
     limit ${key_off},${pageSize}

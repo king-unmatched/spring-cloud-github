@@ -137,7 +137,7 @@
     }
     function shan(id) {
         $.ajax({
-            url:"../del",
+            url:"../item/del",
             type:"post",
             data:{id:id},
             success:function(data){
@@ -149,7 +149,7 @@
     //修改
     function xiu(id){
         $.ajax({
-            url:"../huix",
+            url:"../item/huix",
             type:"post",
             data:{id:id},
             success:function(data){
@@ -160,7 +160,7 @@
     //新增
     function insert(){
         $.ajax({
-            url:"../insert",
+            url:"../item/insert",
             type:"post",
             data:$("#myforms").serialize(),
             datatype:'json',
@@ -184,7 +184,7 @@
             return;
         }
         $.ajax({
-            url:"../del",
+            url:"../item/del",
             type:"post",
             data:{'id':rid},
             success:function(data){
@@ -205,7 +205,7 @@
     function searchItemList() {
         $.ajax({
             type:"post",
-            url:"../select",
+            url:"../item/select",
             data:{"currPage":vm.currPage,"pageSize":vm.pageSize,'itemname':vm.itemname},
             dataType:"json",
             success: function(result) {

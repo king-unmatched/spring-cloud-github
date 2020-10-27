@@ -14,7 +14,7 @@ public class CostBean {
 
     private String costname;
 
-    private String status;
+    private Integer status;
     @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date costtime;
@@ -51,12 +51,12 @@ public class CostBean {
         this.costname = costname == null ? null : costname.trim();
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Date getCosttime() {
