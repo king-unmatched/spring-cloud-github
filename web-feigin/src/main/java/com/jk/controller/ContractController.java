@@ -34,14 +34,14 @@ public class ContractController {
     }
 
 
-    @RequestMapping("addContract")
+    @RequestMapping("add")
     @ResponseBody
     public void insert(ContractBean contract){
         contractService.insert(contract);
     }
 
 
-    @RequestMapping("deleteContract")
+    @RequestMapping("deletee")
     @ResponseBody
     public void del(String[] id){
         contractService.del(id);
