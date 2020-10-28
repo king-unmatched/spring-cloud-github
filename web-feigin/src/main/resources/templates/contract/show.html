@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -12,8 +12,8 @@
 <body>
 <div id="app" class="container">
     <h1>合同管理</h1>
-    <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" onclick="xiu();"><i class="fa fa-file-o"></i> 新建</button>
-    <button type="button" class="btn btn-default" title="删除" onclick="delpi()"><i class="fa fa-trash-o"></i> 删除</button>
+    <button shiro:hasPermission="cont:add" type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" onclick="xiu();"><i class="fa fa-file-o"></i> 新建</button>
+    <button shiro:hasPermission="cont:delete" type="button" class="btn btn-default" title="删除" onclick="delpi()"><i class="fa fa-trash-o"></i> 删除</button>
     <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
     <form action="" id="list_form">
         <div class="form-group">
@@ -47,8 +47,8 @@
             <td>{{contract.cometime}}</td>
             <td>{{contract.voidancetime}}</td>
             <td>
-                <a data-toggle="modal" data-target="#editModal" @click="xiu(contract.id)">[编辑]</a> |
-                <a @click="shan(contract.id)">[删除]</a>
+                <a shiro:hasPermission="cont:update" data-toggle="modal" data-target="#editModal" @click="xiu(contract.id)">[编辑]</a> |
+                <a shiro:hasPermission="cont:delete" @click="shan(contract.id)">[删除]</a>
             </td>
         </tr>
     </table>

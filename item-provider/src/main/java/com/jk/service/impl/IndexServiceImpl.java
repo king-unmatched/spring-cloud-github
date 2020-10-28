@@ -15,17 +15,16 @@ public class IndexServiceImpl implements IndexService {
     private TreeMapper mapper;
 
     @Override
-    public List<Tree> select() {
-        int pid=0;
-        List<Tree> list = pid(pid);
+    public List<Tree> select(Integer id) {
+        Integer pid=1;
+        List<Tree> list = pid(pid,id);
         return list;
     }
 
-    private List<Tree> pid(int pid) {
-        List<Tree> list = mapper.select(pid);
+    private List<Tree> pid(Integer pid,Integer id) {
+        List<Tree> list = mapper.select(pid,id);
         for (Tree tree : list) {
-            Integer id = tree.getId();
-            List<Tree> sdfghjk = pid(id);
+            List<Tree> sdfghjk = pid(tree.getId(),id);
             if (sdfghjk!=null && sdfghjk.size()>0) {
                 tree.setNodes(sdfghjk);
                 tree.setLeaf(true);

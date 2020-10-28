@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.jk.dao.TreeMapper">
 <select id="select" parameterType="int" resultType="com.jk.entity.Tree">
-    select * from t_tree where pid=#{pid}
+    select sp.id as id,sp.name as text,sp.url as url,sp.parentid as pid from
+        sys_user_role sur,
+        sys_role_permission srp,
+        sys_permission sp
+        where sur.sys_user_id=#{id} and
+        sur.sys_role_id=srp.sys_role_id and
+        srp.sys_permission_id=sp.id and
+        sp.parentid=#{pid} and
+        sp.type='menu'
 </select>
 </mapper>
