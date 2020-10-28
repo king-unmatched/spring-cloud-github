@@ -5,5 +5,5 @@ import com.jk.entity.Tree;
 import java.util.List;
 
 public interface IndexService {
-    List<Tree> select();
+    List<Tree> select(Integer id);
 }

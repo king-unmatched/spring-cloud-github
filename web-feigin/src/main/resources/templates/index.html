@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <style type="text/css">
         body{
@@ -20,6 +20,8 @@
 <body>
 <!-- bootstrap展示树 -->
     <div class="container-fluid" style="margin-top: 59px;">
+        <shiro:principal property="username" />
+        <a class="btn btn-info" href="../logout">注销</a>
     <div class="row">
         <div class="col-md-2">
             <div id="myTree"></div>

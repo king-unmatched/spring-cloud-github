@@ -5,6 +5,7 @@ import com.jk.pojo.PageResult;
 import com.jk.service.ItemService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ public class ItemController {
         return ser.select(currPage,pageSize,item);
     }
     @RequestMapping("insert")
+    @RequiresPermissions("item:add")
     @HystrixCommand(fallbackMethod = "insertFail",commandProperties = {
             @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds",value="3000")
     })
@@ -34,6 +36,7 @@ public class ItemController {
         return "加载超时啦~!";
     }
     @RequestMapping("del")
+    @RequiresPermissions("item:delete")
     @HystrixCommand(fallbackMethod = "delFail",commandProperties = {
             @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds",value="3000")
     })
@@ -45,6 +48,7 @@ public class ItemController {
         return "加载超时啦~!";
     }
     @RequestMapping("huix")
+    @RequiresPermissions("item:update")
     public ItemBean huix(Integer id){
         return ser.huix(id);
     }

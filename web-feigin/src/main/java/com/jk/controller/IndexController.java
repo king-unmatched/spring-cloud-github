@@ -1,7 +1,10 @@
 package com.jk.controller;
 
 import com.jk.entity.Tree;
+import com.jk.entity.User;
 import com.jk.service.IndexService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +22,9 @@ public class IndexController {
     @RequestMapping("shu")
     @ResponseBody
     public List<Tree> select(){
-        return ser.select();
+        //查询当前用户所属的权限树
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return ser.select(user.getId());
     }
 
     @RequestMapping("index")
@@ -28,6 +33,7 @@ public class IndexController {
     }
 
     @RequestMapping("itemShow")
+    @RequiresPermissions("item:query")
     public String itemShow(){
         return "Item/ItemShow";
     }

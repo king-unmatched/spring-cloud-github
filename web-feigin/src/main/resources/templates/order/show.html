@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -13,8 +13,8 @@
 <div id="app" class="container">
     <h1>订餐管理</h1>
     <button type="button" class="btn btn-default" title="菜品管理" onclick="findcai()"><i class="fa fa-trash-o"></i>菜品管理</button>
-    <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" onclick="xiu();"><i class="fa fa-file-o"></i> 新建</button>
-    <button type="button" class="btn btn-default" title="删除" onclick="delpi()"><i class="fa fa-trash-o"></i> 删除</button>
+    <button shiro:hasPermission="order:add" type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" onclick="xiu();"><i class="fa fa-file-o"></i> 新建</button>
+    <button shiro:hasPermission="order:delete" type="button" class="btn btn-default" title="删除" onclick="delpi()"><i class="fa fa-trash-o"></i> 删除</button>
     <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
     <table class="table table-bordered">
         <tr>
@@ -32,8 +32,8 @@
             <td>{{order.orderPrice}}</td>
             <td>{{order.orderType==1?"套餐A":"套餐B"}}</td>
             <td>
-                <a data-toggle="modal" data-target="#editModal" @click="xiu(order.orderId)">[编辑]</a> |
-                <a @click="shan(order.orderId)">[删除]</a>
+                <a shiro:hasPermission="order:update" data-toggle="modal" data-target="#editModal" @click="xiu(order.orderId)">[编辑]</a> |
+                <a shiro:hasPermission="order:delete" @click="shan(order.orderId)">[删除]</a>
             </td>
         </tr>
     </table>

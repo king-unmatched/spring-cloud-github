@@ -2,8 +2,10 @@ package com.jk.service;
 
 import com.jk.entity.User;
 
-import javax.servlet.http.HttpSession;
+import java.util.List;
 
 public interface UserService {
-    User login(User user);
+    User login(String userCode);
+
+    List<String> selectPowerKeyList(Integer id);
 }
