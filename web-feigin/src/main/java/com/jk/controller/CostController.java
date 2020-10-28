@@ -25,6 +25,7 @@ public class CostController {
     public String show(){
         return "cost/show";
     }
+
     @RequestMapping("addCost")
     @ResponseBody
     public void addCost(CostBean cos){
@@ -35,5 +36,16 @@ public class CostController {
     @ResponseBody
     public CostBean huixian(@RequestParam Integer id){
         return  costService.huixian(id);
+    }
+
+    @RequestMapping("baoxiao")
+    @ResponseBody
+    public void zhuangtai(Integer id, Integer status){
+        costService.zhuangtai(id,status);
+    }
+
+    @RequestMapping("delete")
+    public void delcost(@RequestParam String id){
+        costService.delcost(id);
     }
 }
