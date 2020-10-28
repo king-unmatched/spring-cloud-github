@@ -106,12 +106,39 @@
 
   <select id="selectcount" resultType="java.lang.Long">
   select count(*) from t_cost
+    <include refid="mysql"></include>
   </select>
 
   <select id="selectlist" resultType="CostBean">
     <bind name="key_off" value="(currPage -1)*pageSize"/>
     select * from t_cost
+    <include refid="mysql"></include>
     limit ${key_off},${pageSize}
   </select>
+  <sql id="mysql">
+    <where>
+      <if test="cost.costname!=null and cost.costname!=''">
+        and costname like '%${cost.costname}%'
+      </if>
+    </where>
+  </sql>
 
+  <update id="zhuangtai">
+    update t_cost
+    <set>
+      <if test="status==2">
+        status=1
+      </if>
+      <if test="status==1">
+        status=2
+      </if>
+    </set>
+    <where>
+      id=#{id}
+    </where>
+  </update>
+
+  <delete id="delcost" parameterType="string">
+    delete from t_cost where id in (ids)
+   </delete>
 </mapper>

@@ -23,4 +23,7 @@ public interface CostBeanMapper {
 
     List<CostBean> selectlist(@Param("currPage") Integer currPage, @Param("pageSize")Integer pageSize, @Param("cost")CostBean cost);
 
+    void zhuangtai(@Param("id") Integer id, @Param("status") Integer status);
+
+    void delcost(@Param("id") String id);
 }

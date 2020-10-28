@@ -4,10 +4,7 @@ import com.jk.entity.CostBean;
 import com.jk.pojo.PageResult;
 import com.jk.service.CostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CostController {
@@ -28,5 +25,12 @@ public class CostController {
     public CostBean huixian(@RequestParam Integer id){
         return  costservice.huixian(id);
     }
-
+    @RequestMapping("zhuangtai")
+    public void zhuangtai(@RequestParam Integer id,@RequestParam Integer status){
+        costservice.zhuangtai(id,status);
+    }
+    @RequestMapping("delcost")
+    public void delcost(@RequestParam String id){
+        costservice.delcost(id);
+    }
 }

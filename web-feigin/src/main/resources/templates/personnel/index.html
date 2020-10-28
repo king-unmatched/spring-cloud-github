@@ -11,12 +11,12 @@
 </head>
 <body>
 <div id="app" class="container">
-    <h1>费用管理</h1>
+    <h1>人才管理</h1>
     <form action="" id="list_form">
         <div class="form-group">
-            <label for="costname" class="col-sm-1 control-label">名称：</label>
+            <label for="personnelName" class="col-sm-1 control-label">名称：</label>
             <div class="col-sm-2">
-                <input type="text" class="form-control" id="costname" v-model="costname" placeholder="请输入名称">
+                <input type="text" class="form-control" id="personnelName" v-model="personnelName" placeholder="请输入名称">
             </div>
         </div>
         <button type="button" class="btn btn-default" onclick="selectlistAll();">搜索</button>
@@ -29,25 +29,26 @@
         <tr>
             <th><input type="checkbox" name="check" id="qx" onclick="quanxuan()"></th>
             <th>序号</th>
-            <th>报销类型</th>
-            <th>金额（元）</th>
-            <th>报销人</th>
-            <th>状态</th>
-            <th>报销日期</th>
+            <th>姓名</th>
+            <th>应聘岗位</th>
+            <th>联系方式</th>
+            <th>信息来源</th>
+            <th>面试反馈</th>
+            <th>人员状态</th>
             <th>操作</th>
         </tr>
-        <tr v-for="we in costAll">
-            <td><input type="checkbox" name="check" :value="we.id"></td>
-            <td>{{we.id}}</td>
-            <td>{{we.costtype==1?"餐费":we.costtype==2?"打车费":we.costtype==3?"其他费用":""}}</td>
-            <td>{{we.money}}</td>
-            <td>{{we.costname}}</td>
-            <td>{{we.status==1?"已报销":"未报销"}}</td>
-            <td>{{we.costtime}}</td>
+        <tr v-for="we in personnel">
+            <td><input type="checkbox" name="check" :value="we.personnelId"></td>
+            <td>{{we.personnelId}}</td>
+            <td>{{we.personnelName}}</td>
+            <td>{{we.jobApplication}}</td>
+            <td>{{we.telephone}}</td>
+            <td>{{we.infoSources}}</td>
+            <td>{{we.feedback==0?"录用":we.feedback==1?"不合格":we.feedback==2?"持续沟通":""}}</td>
+            <td>{{we.status==0?"跟进中":"已完成"}}</td>
             <td>
-                <a class="btn btn-default" data-toggle="modal" data-target="#editModal" @click="huixian(we.id)">详情</a>
-                <a class="btn btn-default" @click="baoxiao(we.id,we.status)">{{we.status==2?"已报销":"未报销"}}</a>
-                <a class="btn btn-default" @click="shanchu(we.id)">删除</a>
+                <a class="btn btn-default" data-toggle="modal" data-target="#editModal" @click="huixian(we.personnelId)">详情</a>
+                <a class="btn btn-default" @click="shanchu(we.personnelId)">删除</a>
             </td>
         </tr>
     </table>
@@ -74,27 +75,38 @@
             <form id="forms" method="post">
                 <div class="modal-body" id="ppa">
                     <table class="table table-bordered table-striped"  width="800px">
-                        <input class="form-control" name="id" style="display:none" v-model="list.id" readonly="readonly">
+                        <input class="form-control" name="personnelId" style="display:none" v-model="list.personnelId" readonly="readonly">
                         <tr>
-                            <td>报销人</td>
-                            <td> <input class="form-control" name="costname" v-model="list.costname"></td>
+                            <td>姓名</td>
+                            <td> <input class="form-control" name="personnelName" v-model="list.personnelName"></td>
                         </tr>
                         <tr>
-                            <td>报销金额</td>
-                            <td> <input class="form-control"   name="money" v-model="list.money"></td>
+                            <td>应聘岗位</td>
+                            <td> <input class="form-control"   name="jobApplication" v-model="list.jobApplication"></td>
                         </tr>
                         <tr>
-                            <td>报销类型</td>
+                            <td>联系方式</td>
+                            <td> <input class="form-control"   name="telephone" v-model="list.telephone"></td>
+                        </tr>
+                        <tr>
+                            <td>信息来源</td>
+                            <td> <input class="form-control"   name="infoSources" v-model="list.infoSources"></td>
+                        </tr>
+                        <tr>
+                            <td>面试反馈</td>
                             <td >
-                                <input type="radio"  name="costtype" v-model="list.costtype" value="1">餐费
-                                <input type="radio"  name="costtype" v-model="list.costtype" value="2">打车费
-                                <input type="radio"  name="costtype" v-model="list.costtype" value="3">其它费用
+                                <select class="form-control" name="feedback" v-model="list.feedback">
+                                    <option value="0">录用</option>
+                                    <option value="1">不合格</option>
+                                    <option value="2">持续沟通</option>
+                                </select>
                             </td>
                         </tr>
                         <tr>
                             <td>状态</td>
                             <td>
-                                <input class="form-control" name="status" v-model="list.status">
+                                <input type="radio"  name="status" v-model="list.status" value="0">跟进中
+                                <input type="radio"  name="status" v-model="list.status" value="1">已完成
                             </td>
                         </tr>
                     </table>
@@ -112,12 +124,12 @@
     var vm=new Vue({
         el:'#app',
         data:{
-            costAll:"",
+            personnel:"",
             totalPage:"",
             total:"",
             currPage:"1",
             pageSize:"3",
-            costname:""
+            personnelName:""
         }
     })
 
@@ -125,7 +137,7 @@
     //新增
     function insert(){
         $.ajax({
-            url:"../to/addCost",
+            url:"../go/add",
             type:"post",
             data:$("#forms").serialize(),
             datatype:'json',
@@ -148,7 +160,7 @@
     }
     function huixian(id){
         $.ajax({
-            url:"../to/hui",
+            url:"../go/huixian",
             type:"post",
             data:{id:id},
             success:function(data){
@@ -165,13 +177,14 @@
                 ids+=ids==""?arr[i].value:","+arr[i].value;
             }
         }
+        alert(ids);
         if (ids=="") {
             alert("请至少选中一条！");
             return;
         }
 
         $.ajax({
-            url:"../to/delete",
+            url:"../go/delPer",
             type:"post",
             data:{id:ids},
             success:function(){
@@ -183,8 +196,9 @@
         })
     }
     function shanchu(ids){
+        alert(ids);
         $.ajax({
-            url:"../to/delete",
+            url:"../go/delPer",
             type:"post",
             data:{id:ids},
             success:function(){
@@ -195,27 +209,17 @@
         })
     }
 
-    function baoxiao(id,status){
-        $.ajax({
-            url:"../to/baoxiao",
-            type:"post",
-            data:{id:id,status:status},
-            success:function(){
-                selectlistAll();
-            }
-        });
-    }
     $(function(){
         selectlistAll();
     })
     function selectlistAll() {
         $.ajax({
             type:"post",
-            url:"../to/list",
-            data:{"currPage":vm.currPage,"pageSize":vm.pageSize,"costname":vm.costname},
+            url:"../go/list",
+            data:{"currPage":vm.currPage,"pageSize":vm.pageSize,"personnelName":vm.personnelName},
             dataType:"json",
             success: function(result) {
-                vm.costAll = result.rows;
+                vm.personnel = result.rows;
                 vm.totalPage = result.totalPage;
                 vm.total = result.total;
                 vm.currPage = result.currPage;

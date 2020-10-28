@@ -12,4 +12,7 @@ public interface CostService {
 
     CostBean huixian(@RequestParam  Integer id);
 
+    void zhuangtai(Integer id, Integer status);
+
+    void delcost(String id);
 }
