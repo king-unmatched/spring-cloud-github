@@ -31,4 +31,10 @@ public class IndexController {
     public String itemShow(){
         return "Item/ItemShow";
     }
+
+
+    @RequestMapping("login")
+    public String login(){
+        return "login";
+    }
 }
