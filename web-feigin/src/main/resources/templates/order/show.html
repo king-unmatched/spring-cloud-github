@@ -32,7 +32,7 @@
             <td>{{order.orderPrice}}</td>
             <td>{{order.orderType==1?"套餐A":"套餐B"}}</td>
             <td>
-                <a shiro:hasPermission="order:update" data-toggle="modal" data-target="#editModal" @click="xiu(order.orderId)">[编辑]</a> |
+                <a shiro:hasPermission="order:update" data-toggle="modal" data-target="#editModal" @click="xiu(order.orderId)">[编辑]</a>
                 <a shiro:hasPermission="order:delete" @click="shan(order.orderId)">[删除]</a>
             </td>
         </tr>

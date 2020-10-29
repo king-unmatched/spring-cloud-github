@@ -46,8 +46,10 @@
             <td>{{we.costtime}}</td>
             <td>
                 <a shiro:hasPermission="cost:update" class="btn btn-default" data-toggle="modal" data-target="#editModal" @click="huixian(we.id)">详情</a>
-                <a class="btn btn-default" @click="baoxiao(we.id,we.status)">{{we.status==2?"已报销":"未报销"}}</a>
+
                 <a shiro:hasPermission="cost:delete" class="btn btn-default" @click="shanchu(we.id)">删除</a>
+
+                <a shiro:hasPermission="cost:zhuangtai" class="btn btn-default" @click="baoxiao(we.id,we.status)">{{we.status==2?"已报销":"未报销"}}</a>
             </td>
         </tr>
     </table>

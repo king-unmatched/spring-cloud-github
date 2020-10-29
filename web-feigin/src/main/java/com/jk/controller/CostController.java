@@ -44,6 +44,7 @@ public class CostController {
 
     @RequestMapping("baoxiao")
     @ResponseBody
+    @RequiresPermissions("cost:zhuangtai")
     public void zhuangtai(Integer id, Integer status){
         costService.zhuangtai(id,status);
     }
