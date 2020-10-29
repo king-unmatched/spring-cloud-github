@@ -1,6 +1,7 @@
 package com.jk.controller;
 
 import com.jk.entity.ContractBean;
+import com.jk.entity.StaffBean;
 import com.jk.pojo.PageResult;
 import com.jk.service.ContractService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +41,36 @@ public class ContractController {
     @RequestMapping("updateContract")
     public void xiu(@RequestParam Integer id){
         contractService.xiu(id);
+    }
+
+
+
+    @RequestMapping("findStaff")
+    public PageResult selectStaff(@RequestParam Integer currPage, @RequestParam Integer pageSize){
+        return contractService.selectStaff(currPage,pageSize);
+    }
+
+
+    @RequestMapping("addStaff")
+    public void insertStaff(@RequestBody StaffBean staff){
+        contractService.insertStaff(staff);
+    }
+
+
+    @RequestMapping("deleteStaff")
+    public void delStaff(@RequestParam String[] staffId){
+        contractService.delStaff(staffId);
+    }
+
+
+    @RequestMapping("StaffHX")
+    public StaffBean StaffHX(@RequestParam Integer staffId){
+        return contractService.StaffHX(staffId);
+    }
+
+
+    @RequestMapping("updateStaff")
+    public void xiuStaff(@RequestParam Integer staffId,@RequestParam Integer staffStatus){
+        contractService.xiuStaff(staffId ,staffStatus);
     }
 }

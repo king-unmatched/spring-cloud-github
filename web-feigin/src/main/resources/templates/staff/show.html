@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap/css/bootstrap.min.css">
+    <script src="../js/bootstraps/bootstrap-paginator.js"></script>
+    <script src="../js/vue/vue.min.js"></script>
+</head>
+<body>
+<div id="app" class="container">
+    <h1>合同管理</h1>
+    <button shiro:hasPermission="staff:add" type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" onclick="xiu();"><i class="fa fa-file-o"></i> 新建</button>
+    <button shiro:hasPermission="staff:delete" type="button" class="btn btn-default" title="删除" onclick="delpi()"><i class="fa fa-trash-o"></i> 删除</button>
+    <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
+    <table class="table table-bordered">
+        <tr>
+            <th><input id="selall" type="checkbox"></th>
+            <th>员工ID</th>
+            <th>员工名称</th>
+            <th>员工工资</th>
+            <th>入职时间</th>
+            <th>员工状态</th>
+            <th>操作</th>
+        </tr>
+        <tr v-for="staff in stafflist">
+            <td><input type="checkbox" name="che" :value="staff.staffId"></td>
+            <td>{{staff.staffId}}</td>
+            <td>{{staff.staffName}}</td>
+            <td>{{staff.staffMoney}}</td>
+            <td>{{staff.staffEntrydate}}</td>
+            <td>{{staff.staffStatus == 1 ? "在职" : "离职" }}</td>
+            <td>
+                <a shiro:hasPermission="staff:update" data-toggle="modal" data-target="#editModal" @click="xiu(staff.staffId)">[编辑]</a>
+                <a shiro:hasPermission="staff:delete" @click="shan(staff.staffId)">[删除]</a>
+                <a shiro:hasPermission="staff:update" @click="xiug(staff.staffId,staff.staffStatus)">[{{staff.staffStatus == 1 ? '离职' : '在职' }}]</a>
+            </td>
+        </tr>
+    </table>
+    <div class="col-md-6">
+        <strong>当前第 {{currPage}}页,每页<select style="width:50px;" v-model="pageSize" @change="shuaxin()">
+            <option value="3">3</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+        </select>条,共 {{totalPage}} 页.一共 {{total}} 条记录
+        </strong>
+    </div>
+    <div id="example" style="text-align: right"> <ul id="pageLimit"></ul> </div>
+</div>
+<!-- 编辑窗口 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="ppa">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">新增</h3>
+            </div>
+            <form id="myforms" method="post">
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped"  width="800px">
+                        <input class="form-control" name="staffId" style="display:none" readonly="readonly" v-model="list.staffId">
+                        <tr>
+                            <td>员工名称</td>
+                            <td><input class="form-control" type="text" name="staffName" v-model="list.staffName"></td>
+                        </tr>
+                        <tr>
+                            <td>员工工资</td>
+                            <td><input class="form-control" type="text" name="staffMoney" v-model="list.staffMoney"></td>
+                        </tr>
+                        <tr>
+                            <td>员工状态</td>
+                            <td><input type="radio" value="1" name="staffStatus" v-model="list.staffStatus">在职
+                                <input type="radio" value="2" name="staffStatus" v-model="list.staffStatus">离职
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>入职时间</td>
+                            <td><input class="form-control" type="date" name="staffEntrydate" v-model="list.staffEntrydate"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" onclick="insert()">保存</button>
+                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            stafflist: "",
+            totalPage:"",
+            total:"",
+            currPage:"1",
+            pageSize:"10",
+        }
+    })
+    var vs = new Vue({
+        el: '#ppa',
+        data: {
+            list:''
+        }
+    })
+
+    function xiug(staffId,staffStatus){
+        $.ajax({
+            url:"../staff/updateStaff",
+            type:"post",
+            data:{staffId:staffId,staffStatus:staffStatus},
+            success:function(){
+                searchStaffList();
+            },
+        });
+    }
+
+    function shuaxin(){
+        searchStaffList();
+    }
+
+    function shan(staffId) {
+        $.ajax({
+            url:"../staff/deleteStaff",
+            type:"post",
+            data:{staffId:staffId},
+            success:function(){
+                alert("删除成功！")
+                searchStaffList();
+            },
+        });
+    }
+    //修改
+    function xiu(staffId){
+        $.ajax({
+            url:"../staff/StaffHX",
+            type:"post",
+            data:{staffId:staffId},
+            success:function(data){
+                vs.list=data;
+            },
+        });
+    }
+    //新增
+    function insert(){
+        $.ajax({
+            url:"../staff/addStaff",
+            type:"post",
+            data:$("#myforms").serialize(),
+            datatype:'json',
+            success:function(){
+                searchStaffList();
+            },
+        });
+    }
+    //批删
+    function delpi(){
+        var arr = document.getElementsByName("che");
+        var rid="";
+        for ( var i = 0; i < arr.length; i++) {
+            if (arr[i].checked) {
+                rid+=rid==""?arr[i].value:","+arr[i].value;
+            }
+        }
+        if (rid=="") {
+            alert("请至少选中一条！");
+            return;
+        }
+        $.ajax({
+            url:"../staff/deleteStaff",
+            type:"post",
+            data:{'staffId':rid},
+            success:function(){
+                alert("删除成功")
+                searchStaffList();
+            },
+        });
+    }
+    //分页查询
+    $(function() {
+        searchStaffList();
+        $("#selall").click(
+            function(){
+                $("input[name='che']").attr("checked",this.checked);
+            })
+    })
+
+    function searchStaffList() {
+        $.ajax({
+            type:"post",
+            url:"../staff/findStaff",
+            data:{"currPage":vm.currPage,"pageSize":vm.pageSize},
+            dataType:"json",
+            success: function(result) {
+                vm.stafflist = result.rows;
+                vm.totalPage = result.totalPage;
+                vm.total = result.total;
+                vm.currPage = result.currPage;
+                vm.pageSize = result.pageSize;
+                setPage(result.currPage,result.totalPage,result.pageSize,searchStaffList);
+            },
+            error : function() {
+                alert("系统错误，请联系管理员！");
+            }
+        })
+    }
+
+    /**
+     *
+     * @param pageCurrent 当前所在页
+     * @param pageSum 总页数
+     * @param callback 调用ajax
+     */
+    function setPage(pageCurrent, pageSum, pageSize, callback) {
+        $('#pageLimit').bootstrapPaginator({
+            currentPage: pageCurrent,//当前的请求页面。
+            totalPages: pageSum,//一共多少页。
+            size:"normal",//应该是页眉的大小。
+            bootstrapMajorVersion: 3,//bootstrap的版本要求。
+            alignment:"right",
+            numberOfPages:pageSize,//一页列出多少数据。
+            itemTexts: function (type, page, current) {//如下的代码是将页眉显示的中文显示我们自定义的中文。
+                switch (type) {
+                    case "first": return "首页";
+                    case "prev": return "上一页";
+                    case "next": return "下一页";
+                    case "last": return "末页";
+                    case "page": return page;
+                }
+            },
+            //当单击操作按钮的时候, 执行该函数, 调用ajax渲染页面
+            onPageClicked: function (event,originalEvent,type,page) {
+                // 把当前点击的页码赋值给currentPage, 调用ajax,渲染页面
+                vm.currPage = page;
+                callback && callback()
+            }
+        });
+    }
+</script>
+</body>
+</html>

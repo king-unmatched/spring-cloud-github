@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.dao.StaffBeanMapper" >
+  <resultMap id="BaseResultMap" type="com.jk.entity.StaffBean" >
+    <id column="staff_id" property="staffId" jdbcType="INTEGER" />
+    <result column="staff_name" property="staffName" jdbcType="VARCHAR" />
+    <result column="staff_money" property="staffMoney" jdbcType="VARCHAR" />
+    <result column="staff_entrydate" property="staffEntrydate" jdbcType="TIMESTAMP" />
+    <result column="staff_status" property="staffStatus" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    staff_id, staff_name, staff_money, staff_entrydate, staff_status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_staff
+    where staff_id = #{staffId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_staff
+    where staff_id = #{staffId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jk.entity.StaffBean" >
+    insert into t_staff (staff_id, staff_name, staff_money,
+      staff_entrydate, staff_status)
+    values (#{staffId,jdbcType=INTEGER}, #{staffName,jdbcType=VARCHAR}, #{staffMoney,jdbcType=VARCHAR},
+      #{staffEntrydate,jdbcType=TIMESTAMP}, #{staffStatus,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jk.entity.StaffBean" >
+    insert into t_staff
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="staffId != null" >
+        staff_id,
+      </if>
+      <if test="staffName != null" >
+        staff_name,
+      </if>
+      <if test="staffMoney != null" >
+        staff_money,
+      </if>
+      <if test="staffEntrydate != null" >
+        staff_entrydate,
+      </if>
+      <if test="staffStatus != null" >
+        staff_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="staffId != null" >
+        #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="staffName != null" >
+        #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="staffMoney != null" >
+        #{staffMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="staffEntrydate != null" >
+        #{staffEntrydate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffStatus != null" >
+        #{staffStatus,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jk.entity.StaffBean" >
+    update t_staff
+    <set >
+      <if test="staffName != null" >
+        staff_name = #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="staffMoney != null" >
+        staff_money = #{staffMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="staffEntrydate != null" >
+        staff_entrydate = #{staffEntrydate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffStatus != null" >
+        staff_status = #{staffStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    where staff_id = #{staffId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jk.entity.StaffBean" >
+    update t_staff
+    set staff_name = #{staffName,jdbcType=VARCHAR},
+      staff_money = #{staffMoney,jdbcType=VARCHAR},
+      staff_entrydate = #{staffEntrydate,jdbcType=TIMESTAMP},
+      staff_status = #{staffStatus,jdbcType=INTEGER}
+    where staff_id = #{staffId,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="countStaff" resultType="java.lang.Long">
+  	select count(*) from t_staff
+  </select>
+
+  <select id="findStaffPage" resultMap="BaseResultMap">
+    <bind name="key_off" value="(currPage - 1)*pageSize"/>
+    select * from t_staff
+     limit ${key_off},${pageSize}
+  </select>
+
+  <delete id="del">
+    delete from t_staff where staff_id in
+    (<foreach collection="array" separator="," item="staffId">
+    #{staffId}
+  </foreach>)
+  </delete>
+
+  <update id="xiuStaff">
+    update t_staff
+    <set>
+      <if test="staffStatus == 1">
+        staff_status = 2
+      </if>
+      <if test="staffStatus == 2">
+        staff_status = 1
+      </if>
+    </set>
+    <where>
+      staff_id = #{staffId}
+    </where>
+  </update>
+
+
+
+</mapper>
