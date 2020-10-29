@@ -11,45 +11,40 @@
 </head>
 <body>
 <div id="app" class="container">
-    <h1>费用管理</h1>
+    <h1>商业管理</h1>
     <form action="" id="list_form">
         <div class="form-group">
-            <label for="costname" class="col-sm-1 control-label">名称：</label>
+            <label for="merchantName" class="col-sm-1 control-label">名称：</label>
             <div class="col-sm-2">
-                <input type="text" class="form-control" id="costname" v-model="costname" placeholder="请输入名称">
+                <input type="text" class="form-control" id="merchantName" v-model="merchantName" placeholder="请输入名称">
             </div>
         </div>
         <button type="button" class="btn btn-default" onclick="selectlistAll();">搜索</button>
     </form>
     <br>
-    <button shiro:hasPermission="cost:add" type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" onclick="huixian(0);"><i class="fa fa-file-o"></i> 新建</button>
+    <button shiro:hasPermission="mer:add" type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" ><i class="fa fa-file-o"></i> 新建</button>
     <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
-    <a shiro:hasPermission="cost:delete" class="btn btn-default" @click="piliang()">删除</a>
+    <a shiro:hasPermission="mer:delete" class="btn btn-default" @click="piliang()">删除</a>
     <table class="table table-bordered">
         <tr>
             <th><input type="checkbox" name="check" id="qx" onclick="quanxuan()"></th>
             <th>序号</th>
-            <th>报销类型</th>
-            <th>金额（元）</th>
-            <th>报销人</th>
-            <th>状态</th>
-            <th>报销日期</th>
+            <th>商人名字</th>
+            <th>收入</th>
+            <th>入职时间</th>
+            <th>是否入职</th>
             <th>操作</th>
         </tr>
-        <tr v-for="we in costAll">
-            <td><input type="checkbox" name="check" :value="we.id"></td>
-            <td>{{we.id}}</td>
-            <td>{{we.costtype==1?"餐费":we.costtype==2?"打车费":we.costtype==3?"其他费用":""}}</td>
-            <td>{{we.money}}</td>
-            <td>{{we.costname}}</td>
-            <td>{{we.status==1?"已报销":"未报销"}}</td>
-            <td>{{we.costtime}}</td>
+        <tr v-for="we in merAll">
+            <td><input type="checkbox" name="check" :value="we.merchantId"></td>
+            <td>{{we.merchantId}}</td>
+            <td>{{we.merchantName}}</td>
+            <td>{{we.merchantIncome}}</td>
+            <td>{{we.merchantAssumedate}}</td>
+            <td>{{we.merchantStatus==0?"在职":"休息"}}</td>
             <td>
-                <a shiro:hasPermission="cost:update" class="btn btn-default" data-toggle="modal" data-target="#editModal" @click="huixian(we.id)">详情</a>
-
-                <a shiro:hasPermission="cost:delete" class="btn btn-default" @click="shanchu(we.id)">删除</a>
-
-                <a shiro:hasPermission="cost:zhuangtai" class="btn btn-default" @click="baoxiao(we.id,we.status)">{{we.status==2?"已报销":"未报销"}}</a>
+                <a shiro:hasPermission="mer:update" class="btn btn-default" data-toggle="modal" data-target="#editModal" @click="huixian(we.merchantId)">详情</a>
+                <a  shiro:hasPermission="mer:delete"class="btn btn-default" @click="shanchu(we.merchantId)">删除</a>
             </td>
         </tr>
     </table>
@@ -71,32 +66,25 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h3 id="myModalLabel">费用管理</h3>
+                <h3 id="myModalLabel">商业管理</h3>
             </div>
             <form id="forms" method="post">
                 <div class="modal-body" id="ppa">
                     <table class="table table-bordered table-striped"  width="800px">
-                        <input class="form-control" name="id" style="display:none" v-model="list.id" readonly="readonly">
+                        <input class="form-control" name="merchantId" style="display:none" v-model="list.merchantId" readonly="readonly">
                         <tr>
-                            <td>报销人</td>
-                            <td> <input class="form-control" name="costname" v-model="list.costname"></td>
+                            <td>姓名</td>
+                            <td> <input class="form-control" name="merchantName" v-model="list.merchantName"></td>
                         </tr>
                         <tr>
-                            <td>报销金额</td>
-                            <td> <input class="form-control"   name="money" v-model="list.money"></td>
-                        </tr>
-                        <tr>
-                            <td>报销类型</td>
-                            <td >
-                                <input type="radio"  name="costtype" v-model="list.costtype" value="1">餐费
-                                <input type="radio"  name="costtype" v-model="list.costtype" value="2">打车费
-                                <input type="radio"  name="costtype" v-model="list.costtype" value="3">其它费用
-                            </td>
+                            <td>收入</td>
+                            <td> <input class="form-control"   name="merchantIncome" v-model="list.merchantIncome"></td>
                         </tr>
                         <tr>
                             <td>状态</td>
                             <td>
-                                <input class="form-control" name="status" v-model="list.status">
+                                <input type="radio"  name="merchantStatus" v-model="list.merchantStatus" value="0">在职
+                                <input type="radio"  name="merchantStatus" v-model="list.merchantStatus" value="1">休息
                             </td>
                         </tr>
                     </table>
@@ -114,18 +102,20 @@
     var vm=new Vue({
         el:'#app',
         data:{
-            costAll:"",
+            merAll:"",
             totalPage:"",
             total:"",
             currPage:"1",
             pageSize:"3",
-            costname:""
+            merchantName:""
         }
     })
+
+
     //新增
     function insert(){
         $.ajax({
-            url:"../to/addCost",
+            url:"../mer/addMer",
             type:"post",
             data:$("#forms").serialize(),
             datatype:'json',
@@ -148,7 +138,7 @@
     }
     function huixian(id){
         $.ajax({
-            url:"../to/hui",
+            url:"../mer/huixian",
             type:"post",
             data:{id:id},
             success:function(data){
@@ -165,13 +155,14 @@
                 ids+=ids==""?arr[i].value:","+arr[i].value;
             }
         }
+        alert(ids);
         if (ids=="") {
             alert("请至少选中一条！");
             return;
         }
 
         $.ajax({
-            url:"../to/delete",
+            url:"../mer/delMer",
             type:"post",
             data:{id:ids},
             success:function(){
@@ -183,8 +174,9 @@
         })
     }
     function shanchu(ids){
+        alert(ids);
         $.ajax({
-            url:"../to/delete",
+            url:"../mer/delMer",
             type:"post",
             data:{id:ids},
             success:function(){
@@ -195,27 +187,17 @@
         })
     }
 
-    function baoxiao(id,status){
-        $.ajax({
-            url:"../to/baoxiao",
-            type:"post",
-            data:{id:id,status:status},
-            success:function(){
-                selectlistAll();
-            }
-        });
-    }
     $(function(){
         selectlistAll();
     })
     function selectlistAll() {
         $.ajax({
             type:"post",
-            url:"../to/list",
-            data:{"currPage":vm.currPage,"pageSize":vm.pageSize,"costname":vm.costname},
+            url:"../mer/list",
+            data:{"currPage":vm.currPage,"pageSize":vm.pageSize,"merchantName":vm.merchantName},
             dataType:"json",
             success: function(result) {
-                vm.costAll = result.rows;
+                vm.merAll = result.rows;
                 vm.totalPage = result.totalPage;
                 vm.total = result.total;
                 vm.currPage = result.currPage;

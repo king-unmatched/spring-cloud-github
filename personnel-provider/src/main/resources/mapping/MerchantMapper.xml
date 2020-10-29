@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.dao.MerchantMapper" >
+  <resultMap id="BaseResultMap" type="com.jk.entity.Merchant" >
+    <id column="merchant_id" property="merchantId" jdbcType="INTEGER" />
+    <result column="merchant_name" property="merchantName" jdbcType="VARCHAR" />
+    <result column="merchant_income" property="merchantIncome" jdbcType="VARCHAR" />
+    <result column="merchant_assumedate" property="merchantAssumedate" jdbcType="TIMESTAMP" />
+    <result column="merchant_status" property="merchantStatus" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    merchant_id, merchant_name, merchant_income, merchant_assumedate, merchant_status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_merchant
+    where merchant_id = #{merchantId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_merchant
+    where merchant_id = #{merchantId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.jk.entity.Merchant" >
+    insert into t_merchant (merchant_id, merchant_name, merchant_income, 
+      merchant_assumedate, merchant_status)
+    values (#{merchantId,jdbcType=INTEGER}, #{merchantName,jdbcType=VARCHAR}, #{merchantIncome,jdbcType=VARCHAR}, 
+      #{merchantAssumedate,jdbcType=TIMESTAMP}, #{merchantStatus,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jk.entity.Merchant" >
+    insert into t_merchant
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="merchantId != null" >
+        merchant_id,
+      </if>
+      <if test="merchantName != null" >
+        merchant_name,
+      </if>
+      <if test="merchantIncome != null" >
+        merchant_income,
+      </if>
+      <if test="merchantAssumedate != null" >
+        merchant_assumedate,
+      </if>
+      <if test="merchantStatus != null" >
+        merchant_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="merchantId != null" >
+        #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="merchantName != null" >
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantIncome != null" >
+        #{merchantIncome,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantAssumedate != null" >
+        #{merchantAssumedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="merchantStatus != null" >
+        #{merchantStatus,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jk.entity.Merchant" >
+    update t_merchant
+    <set >
+      <if test="merchantName != null" >
+        merchant_name = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantIncome != null" >
+        merchant_income = #{merchantIncome,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantAssumedate != null" >
+        merchant_assumedate = #{merchantAssumedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="merchantStatus != null" >
+        merchant_status = #{merchantStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    where merchant_id = #{merchantId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jk.entity.Merchant" >
+    update t_merchant
+    set merchant_name = #{merchantName,jdbcType=VARCHAR},
+      merchant_income = #{merchantIncome,jdbcType=VARCHAR},
+      merchant_assumedate = #{merchantAssumedate,jdbcType=TIMESTAMP},
+      merchant_status = #{merchantStatus,jdbcType=INTEGER}
+    where merchant_id = #{merchantId,jdbcType=INTEGER}
+  </update>
+
+  <delete id="delMer" parameterType="string">
+    delete from t_merchant where merchant_id in (${id})
+  </delete>
+
+  <select id="selectcount" resultType="java.lang.Long">
+    select count(*) from t_merchant
+  </select>
+
+  <select id="merlistAll" resultType="Merchant">
+    <bind name="key_off" value="(currPage -1)*pageSize"/>
+    select * from t_merchant
+    limit ${key_off},${pageSize}
+  </select>
+</mapper>
