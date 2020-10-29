@@ -6,7 +6,7 @@ import com.jk.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -14,7 +14,12 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public User login(User user) {
-        return userMapper.login(user.getUserName());
+    public User login(String userCode) {
+        return userMapper.login(userCode);
+    }
+
+    @Override
+    public List<String> selectPowerKeyList(Integer id) {
+        return userMapper.selectPowerKeyList(id);
     }
 }

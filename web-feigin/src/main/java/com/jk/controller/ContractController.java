@@ -5,6 +5,7 @@ import com.jk.pojo.PageResult;
 import com.jk.pojo.RedisContent;
 import com.jk.service.ContractService;
 import com.jk.util.RedisUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,7 @@ public class ContractController {
 
 
     @RequestMapping("tocontract")
+    @RequiresPermissions("cont:query")
     public String tocontract(){
         return "contract/show";
     }
@@ -36,6 +38,7 @@ public class ContractController {
 
     @RequestMapping("add")
     @ResponseBody
+    @RequiresPermissions("cont:add")
     public void insert(ContractBean contract){
         contractService.insert(contract);
     }
@@ -43,6 +46,7 @@ public class ContractController {
 
     @RequestMapping("deletee")
     @ResponseBody
+    @RequiresPermissions("cont:delete")
     public void del(String[] id){
         contractService.del(id);
     }
@@ -50,6 +54,7 @@ public class ContractController {
 
     @RequestMapping("contractHX")
     @ResponseBody
+    @RequiresPermissions("cont:update")
     public ContractBean huix(Integer id){
         return contractService.huix(id);
     }

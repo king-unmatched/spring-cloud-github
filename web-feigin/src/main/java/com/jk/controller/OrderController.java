@@ -4,6 +4,7 @@ import com.jk.entity.FoodBean;
 import com.jk.entity.OrderBean;
 import com.jk.pojo.PageResult;
 import com.jk.service.OrderService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ public class OrderController {
     private OrderService orderService;
 
     @RequestMapping("toorder")
+    @RequiresPermissions("order:query")
     public String toorder(){
         return "order/show";
     }
@@ -30,6 +32,7 @@ public class OrderController {
 
     @RequestMapping("addOrder")
     @ResponseBody
+    @RequiresPermissions("order:add")
     public void insert(OrderBean order){
         orderService.insert(order);
     }
@@ -37,6 +40,7 @@ public class OrderController {
 
     @RequestMapping("deleteOrder")
     @ResponseBody
+    @RequiresPermissions("order:delete")
     public void del(String[] orderId){
         orderService.del(orderId);
     }
@@ -44,6 +48,7 @@ public class OrderController {
 
     @RequestMapping("orderHX")
     @ResponseBody
+    @RequiresPermissions("order:update")
     public OrderBean huix(Integer orderId){
         return orderService.huix(orderId);
     }

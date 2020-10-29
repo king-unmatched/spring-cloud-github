@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <title>员工管理</title>
@@ -11,20 +11,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
 </head>
-<body>
+<body style="background-color:rgba(0,0,0,0);">
 <div id="app" class="container">
     <h1>员工管理</h1>
-    <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" onclick="xiu(0);"><i class="fa fa-file-o"></i> 新建</button>
-    <button type="button" class="btn btn-default" title="删除" onclick="delpi()"><i class="fa fa-trash-o"></i> 删除</button>
-    <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
+    <button shiro:hasPermission="item:add" style="background-color:rgba(0,0,0,0);" type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" onclick="xiu(0);"><i class="fa fa-file-o"></i> 新建</button>
+    <button shiro:hasPermission="item:delete" style="background-color:rgba(0,0,0,0);" type="button" class="btn btn-default" title="删除" onclick="delpi()"><i class="fa fa-trash-o"></i> 删除</button>
+    <button style="background-color:rgba(0,0,0,0);" type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
     <form action="" id="list_form">
         <div class="form-group">
             <label for="itemname" class="col-sm-1 control-label">名称：</label>
             <div class="col-sm-2">
-                <input type="text" class="form-control" id="itemname" v-model="itemname" placeholder="请输入名称">
+                <input style="background-color:rgba(0,0,0,0);" type="text" class="form-control" id="itemname" v-model="itemname" placeholder="请输入名称">
             </div>
         </div>
-        <button type="button" class="btn btn-default" onclick="searchItemList()">搜索</button>
+        <button style="background-color:rgba(0,0,0,0);" type="button" class="btn btn-default" onclick="searchItemList()">搜索</button>
     </form>
     <br/>
     <table class="table table-bordered">
@@ -49,20 +49,20 @@
             <td>{{item.itemstatus==0?'进行中':item.itemstatus==1?'已完成':'已延迟'}}</td>
             <td>{{item.itemcreatime}}</td>
             <td>
-                <a data-toggle="modal" data-target="#editModal" @click="xiu(item.id)">[跟进]</a> |
-                <a @click="shan(item.id)">[删除]</a>
+                <a shiro:hasPermission="item:update" data-toggle="modal" data-target="#editModal" @click="xiu(item.id)">[跟进]</a> |
+                <a shiro:hasPermission="item:delete" @click="shan(item.id)">[删除]</a>
             </td>
         </tr>
     </table>
     <div class="col-md-6">
-        <strong>当前第 {{currPage}}页,每页<select style="width:50px;" v-model="pageSize" @change="shuaxin()">
+        <strong>当前第 {{currPage}}页,每页<select style="width:50px;background-color:rgba(0,0,0,0);" v-model="pageSize" @change="shuaxin()">
             <option value="3">3</option>
             <option value="6">6</option>
             <option value="10">10</option>
         </select>条,共 {{totalPage}} 页.一共 {{total}} 条记录
         </strong>
     </div>
-    <div id="example" style="text-align: right"> <ul id="pageLimit"></ul> </div>
+    <div id="example" style="text-align: right;"> <ul id="pageLimit"></ul> </div>
 </div>
 <!-- 编辑窗口 -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
