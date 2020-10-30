@@ -11,29 +11,40 @@
 </head>
 <body>
 <div id="app" class="container">
-    <h1>订餐管理</h1>
-    <button type="button" class="btn btn-default" title="菜品管理" onclick="findcai()"><i class="fa fa-trash-o"></i>菜品管理</button>
-    <button shiro:hasPermission="order:add" type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" onclick="xiu();"><i class="fa fa-file-o"></i> 新建</button>
-    <button shiro:hasPermission="order:delete" type="button" class="btn btn-default" title="删除" onclick="delpi()"><i class="fa fa-trash-o"></i> 删除</button>
+    <h1>商业管理</h1>
+    <form action="" id="list_form">
+        <div class="form-group">
+            <label for="merchantName" class="col-sm-1 control-label">名称：</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="merchantName" v-model="merchantName" placeholder="请输入名称">
+            </div>
+        </div>
+        <button type="button" class="btn btn-default" onclick="selectlistAll();">搜索</button>
+    </form>
+    <br>
+    <button shiro:hasPermission="mer:add" type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" ><i class="fa fa-file-o"></i> 新建</button>
     <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
+    <a shiro:hasPermission="mer:delete" class="btn btn-default" @click="piliang()">删除</a>
     <table class="table table-bordered">
         <tr>
-            <th><input id="selall" type="checkbox"></th>
+            <th><input type="checkbox" name="check" id="qx" onclick="quanxuan()"></th>
             <th>序号</th>
-            <th>订餐人</th>
-            <th>订餐价格</th>
-            <th>订餐类型</th>
+            <th>商人名字</th>
+            <th>收入</th>
+            <th>入职时间</th>
+            <th>是否入职</th>
             <th>操作</th>
         </tr>
-        <tr v-for="order in orderlist">
-            <td><input type="checkbox" name="che" :value="order.orderId"></td>
-            <td>{{order.orderId}}</td>
-            <td>{{order.orderName}}</td>
-            <td>{{order.orderPrice}}</td>
-            <td>{{order.orderType==1?"套餐A":"套餐B"}}</td>
+        <tr v-for="we in merAll">
+            <td><input type="checkbox" name="check" :value="we.merchantId"></td>
+            <td>{{we.merchantId}}</td>
+            <td>{{we.merchantName}}</td>
+            <td>{{we.merchantIncome}}</td>
+            <td>{{we.merchantAssumedate}}</td>
+            <td>{{we.merchantStatus==0?"在职":"休息"}}</td>
             <td>
-                <a shiro:hasPermission="order:update" data-toggle="modal" data-target="#editModal" @click="xiu(order.orderId)">[编辑]</a>
-                <a shiro:hasPermission="order:delete" @click="shan(order.orderId)">[删除]</a>
+                <a shiro:hasPermission="mer:update" class="btn btn-default" data-toggle="modal" data-target="#editModal" @click="huixian(we.merchantId)">详情</a>
+                <a  shiro:hasPermission="mer:delete"class="btn btn-default" @click="shanchu(we.merchantId)">删除</a>
             </td>
         </tr>
     </table>
@@ -48,53 +59,72 @@
     </div>
     <div id="example" style="text-align: right"> <ul id="pageLimit"></ul> </div>
 </div>
-<!-- 编辑窗口 -->
+
+<!--新建弹框-->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" id="ppa">
+    <div class="modal-dialog" >
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">新增</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 id="myModalLabel">商业管理</h3>
             </div>
-            <form id="myforms" method="post">
-                <div class="modal-body">
+            <form id="forms" method="post">
+                <div class="modal-body" id="ppa">
                     <table class="table table-bordered table-striped"  width="800px">
-                        <input class="form-control" name="orderId" style="display:none" readonly="readonly" v-model="list.orderId">
+                        <input class="form-control" name="merchantId" style="display:none" v-model="list.merchantId" readonly="readonly">
                         <tr>
-                            <td>订餐人</td>
-                            <td><input class="form-control" type="text" name="orderName" v-model="list.orderName"></td>
+                            <td>姓名</td>
+                            <td> <input class="form-control" name="merchantName" v-model="list.merchantName"></td>
                         </tr>
                         <tr>
-                            <td>订餐价格</td>
-                            <td><input class="form-control" type="text" name="orderPrice" v-model="list.orderPrice"></td>
+                            <td>收入</td>
+                            <td> <input class="form-control"   name="merchantIncome" v-model="list.merchantIncome"></td>
                         </tr>
                         <tr>
-                            <td>订餐类型</td>
-                            <td><input type="radio" value="1" name="orderType" v-model="list.orderType">套餐A
-                                <input type="radio" value="2" name="orderType" v-model="list.orderType">套餐B
+                            <td>状态</td>
+                            <td>
+                                <input type="radio"  name="merchantStatus" v-model="list.merchantStatus" value="0">在职
+                                <input type="radio"  name="merchantStatus" v-model="list.merchantStatus" value="1">休息
                             </td>
                         </tr>
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" onclick="insert()">保存</button>
+                    <button class="btn btn-success" onclick="insert()" data-dismiss="modal" aria-hidden="true">保存</button>
                     <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+</body>
 <script type="text/javascript">
-    var vm = new Vue({
-        el: '#app',
-        data: {
-            orderlist: "",
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            merAll:"",
             totalPage:"",
             total:"",
             currPage:"1",
-            pageSize:"10",
+            pageSize:"3",
+            merchantName:""
         }
     })
+
+
+    //新增
+    function insert(){
+        $.ajax({
+            url:"../mer/addMer",
+            type:"post",
+            data:$("#forms").serialize(),
+            datatype:'json',
+            success:function(){
+                selectlistAll();
+            },
+        });
+    }
+
 
     var vs = new Vue({
         el: '#ppa',
@@ -103,103 +133,76 @@
         }
     })
 
-    function xiug(orderId){
-        $.ajax({
-            url:"/order/updateOrder",
-            type:"post",
-            data:{orderId:orderId},
-            success:function(){
-                searchOrderList();
-            },
-        });
-    }
-
     function shuaxin(){
-        searchOrderList();
+        selectlistAll();
     }
-
-    function shan(orderId) {
+    function huixian(id){
         $.ajax({
-            url:"/order/deleteOrder",
+            url:"../mer/huixian",
             type:"post",
-            data:{orderId:orderId},
-            success:function(){
-                alert("删除成功！")
-                searchOrderList();
-            },
-        });
-    }
-
-    //修改
-    function xiu(orderId){
-        $.ajax({
-            url:"/order/orderHX",
-            type:"post",
-            data:{orderId:orderId},
+            data:{id:id},
             success:function(data){
                 vs.list=data;
             },
         });
     }
 
-    //新增
-    function insert(){
-        $.ajax({
-            url:"/order/addOrder",
-            type:"post",
-            data:$("#myforms").serialize(),
-            datatype:'json',
-            success:function(){
-                searchOrderList();
-            },
-        });
-    }
-
-    //批删
-    function delpi(){
-        var arr = document.getElementsByName("che");
-        var rid="";
+    function piliang(){
+        var arr = document.getElementsByName("check");
+        var ids="";
         for ( var i = 0; i < arr.length; i++) {
             if (arr[i].checked) {
-                rid+=rid==""?arr[i].value:","+arr[i].value;
+                ids+=ids==""?arr[i].value:","+arr[i].value;
             }
         }
-        if (rid=="") {
+        alert(ids);
+        if (ids=="") {
             alert("请至少选中一条！");
             return;
         }
+
         $.ajax({
-            url:"/order/deleteOrder",
+            url:"../mer/delMer",
             type:"post",
-            data:{'orderId':rid},
+            data:{id:ids},
             success:function(){
-                alert("删除成功")
-                searchOrderList();
-            },
-        });
+                alert("Nice成功");
+                selectlistAll();
+
+            }
+
+        })
+    }
+    function shanchu(ids){
+        alert(ids);
+        $.ajax({
+            url:"../mer/delMer",
+            type:"post",
+            data:{id:ids},
+            success:function(){
+                alert("Nice成功");
+                selectlistAll();
+            }
+
+        })
     }
 
-    //分页查询
-    $(function() {
-        searchOrderList();
-        $("#selall").click(
-            function(){
-                $("input[name='che']").attr("checked",this.checked);
-            })
+    $(function(){
+        selectlistAll();
     })
-    function searchOrderList() {
+    function selectlistAll() {
         $.ajax({
             type:"post",
-            url:"/order/findOrder",
-            data:{"currPage":vm.currPage,"pageSize":vm.pageSize,"name":vm.name},
+            url:"../mer/list",
+            data:{"currPage":vm.currPage,"pageSize":vm.pageSize,"merchantName":vm.merchantName},
             dataType:"json",
             success: function(result) {
-                vm.orderlist = result.rows;
+                vm.merAll = result.rows;
                 vm.totalPage = result.totalPage;
                 vm.total = result.total;
                 vm.currPage = result.currPage;
                 vm.pageSize = result.pageSize;
-                setPage(result.currPage,result.totalPage,result.pageSize,searchOrderList);
+                setPage(result.currPage,result.totalPage,result.pageSize,selectlistAll);
             },
             error : function() {
                 alert("系统错误，请联系管理员！");
@@ -207,9 +210,6 @@
         })
     }
 
-    function findcai(){
-        window.location.href="/order/tofood"
-    }
 
 
 
@@ -244,6 +244,7 @@
             }
         });
     }
+
+
 </script>
-</body>
 </html>

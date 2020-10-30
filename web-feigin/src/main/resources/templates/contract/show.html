@@ -47,7 +47,7 @@
             <td>{{contract.cometime}}</td>
             <td>{{contract.voidancetime}}</td>
             <td>
-                <a shiro:hasPermission="cont:update" data-toggle="modal" data-target="#editModal" @click="xiu(contract.id)">[编辑]</a> |
+                <a shiro:hasPermission="cont:update" data-toggle="modal" data-target="#editModal" @click="xiu(contract.id)">[编辑]</a>
                 <a shiro:hasPermission="cont:delete" @click="shan(contract.id)">[删除]</a>
             </td>
         </tr>
