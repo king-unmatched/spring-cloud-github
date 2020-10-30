@@ -7,6 +7,8 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -14,6 +16,8 @@ import javax.annotation.Resource;
 @Aspect
 @Component
 public class LogAspect {
+
+    private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
     @Resource
     LogSenderService logSenderService;
@@ -28,7 +32,7 @@ public class LogAspect {
         Object[] args = joinPoint.getArgs();
         StringBuffer requestParams = new StringBuffer();
         for (int i =0; i<args.length; i++){
-            requestParams.append("第"+(i+1)+"个参数=").append(args[i]);
+            requestParams.append("|第"+(i+1)+"个参数：" + args[i]);
         }
         String responseParams = obj == null ? "" : obj.toString();
 
@@ -38,8 +42,9 @@ public class LogAspect {
         log.setRequestParam(requestParams.toString());
         log.setResponseParam(responseParams);
 
-        String logjson = JSONObject.toJSONString(log);
+        String logJson = JSONObject.toJSONString(log);
 
-        logSenderService.send(logjson);
+        logger.info(logJson);
+        logSenderService.send(logJson);
     }
 }

@@ -28,10 +28,10 @@
         <tr>
             <th><input type="checkbox" name="check" id="qx" onclick="quanxuan()"></th>
             <th>序号</th>
-            <th>className</th>
-            <th>methodName</th>
-            <th>requestParam</th>
-            <th>requestParam</th>
+            <th>类名</th>
+            <th>方法名</th>
+            <th>传的参数</th>
+            <th>返回的参数</th>
             <th>操作</th>
         </tr>
         <tr v-for="we in log">
@@ -40,7 +40,7 @@
             <td>{{we.className}}</td>
             <td>{{we.methodName}}</td>
             <td>{{we.requestParam}}</td>
-            <td>{{we.requestParam}}</td>
+            <td>{{we.responseParam}}</td>
             <td>
             <a  class="btn btn-default" @click="shanchu(we.id)">删除</a>
             </td>
