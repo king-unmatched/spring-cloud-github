@@ -28,7 +28,7 @@ public class LogAspect {
         Object[] args = joinPoint.getArgs();
         StringBuffer requestParams = new StringBuffer();
         for (int i =0; i<args.length; i++){
-            requestParams.append("第"+i+"个参数=").append(args[i]);
+            requestParams.append("第"+(i+1)+"个参数=").append(args[i]);
         }
         String responseParams = obj == null ? "" : obj.toString();
 
